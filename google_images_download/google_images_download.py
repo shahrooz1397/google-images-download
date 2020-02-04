@@ -33,6 +33,9 @@ import json
 import re
 import codecs
 import socket
+from fake_useragent import FakeUserAgent
+
+
 
 args_list = ["keywords", "keywords_from_file", "prefix_keywords", "suffix_keywords",
              "limit", "format", "color", "color_type", "usage_rights", "size",
@@ -42,6 +45,8 @@ args_list = ["keywords", "keywords_from_file", "prefix_keywords", "suffix_keywor
              "thumbnail", "thumbnail_only", "language", "prefix", "chromedriver", "related_images", "safe_search", "no_numbering",
              "offset", "no_download","save_source","silent_mode","ignore_urls"]
 
+
+ua = FakeUserAgent()
 
 def user_input():
     config = argparse.ArgumentParser()
@@ -134,7 +139,7 @@ class googleimagesdownload:
         if cur_version >= version:  # If the Current Version of Python is 3.0 or above
             try:
                 headers = {}
-                headers['User-Agent'] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
+                headers['User-Agent'] = ua.random
                 req = urllib.request.Request(url, headers=headers)
                 resp = urllib.request.urlopen(req)
                 respData = str(resp.read())
@@ -146,7 +151,7 @@ class googleimagesdownload:
         else:  # If the Current Version of Python is 2.x
             try:
                 headers = {}
-                headers['User-Agent'] = "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
+                headers['User-Agent'] = ua.random
                 req = urllib2.Request(url, headers=headers)
                 try:
                     response = urllib2.urlopen(req)
@@ -295,7 +300,7 @@ class googleimagesdownload:
                 raise
             pass
         req = Request(url, headers={
-            "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
+            "User-Agent": ua.random})
 
         response = urlopen(req, None, 10)
         data = response.read()
@@ -329,7 +334,7 @@ class googleimagesdownload:
             try:
                 searchUrl = 'https://www.google.com/searchbyimage?site=search&sa=X&image_url=' + similar_images
                 headers = {}
-                headers['User-Agent'] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
+                headers['User-Agent'] = ua.random
 
                 req1 = urllib.request.Request(searchUrl, headers=headers)
                 resp1 = urllib.request.urlopen(req1)
@@ -351,7 +356,7 @@ class googleimagesdownload:
             try:
                 searchUrl = 'https://www.google.com/searchbyimage?site=search&sa=X&image_url=' + similar_images
                 headers = {}
-                headers['User-Agent'] = "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"
+                headers['User-Agent'] = ua.random
 
                 req1 = urllib2.Request(searchUrl, headers=headers)
                 resp1 = urllib2.urlopen(req1)
@@ -515,7 +520,7 @@ class googleimagesdownload:
             return "success","Printed url without downloading"
         try:
             req = Request(image_url, headers={
-                "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
+                "User-Agent": ua.random})
             try:
                 # timeout time to download an image
                 if socket_timeout:
@@ -588,7 +593,7 @@ class googleimagesdownload:
             return "success","Printed url without downloading",None,image_url
         try:
             req = Request(image_url, headers={
-                "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
+                "User-Agent": ua.random})
             try:
                 # timeout time to download an image
                 if socket_timeout:
@@ -670,7 +675,7 @@ class googleimagesdownload:
                 download_message = "URLError on an image...trying next one..." + " Error: " + str(e)
                 return_image_name = ''
                 absolute_path = ''
-                
+
             except BadStatusLine as e:
                 download_status = 'fail'
                 download_message = "BadStatusLine on an image...trying next one..." + " Error: " + str(e)
